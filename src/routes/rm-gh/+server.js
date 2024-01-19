@@ -14,13 +14,12 @@ import Classic_template, {
     global_stats
 } from '$lib/stat-card-template/Classic'
 
-let stats_by_category = []
-let global_stat_badges = { ...global_stats }
-let svg_props = { ...light }
-let vectors = ''
-
-
 export async function GET( { url, setHeaders } ) {
+
+    let stats_by_category = []
+    let global_stat_badges = { ...global_stats }
+    let svg_props = { ...light }
+    let vectors = ''
     
     /* Get request params */
     const user  = await url.searchParams.get('nickname')
@@ -64,8 +63,8 @@ export async function GET( { url, setHeaders } ) {
         const percentage = ch("h4>div>span").text().trim().split('%')
         const categories = ch("h4>a");
         
-        (  gstats === 'show' ) ?  global_stat_badges = {rank,score,chall_done, compromissions} : global_stat_badges ;
-        
+        (  gstats && gstats === 'show' ) ?  global_stat_badges = {rank:rank, score:score, chall_done:chall_done, compromissions:compromissions} : global_stat_badges = {...global_stat_badges} ;
+
         /* Build the SVG stat bars */
         categories.each((i, category) => {
             stats_by_category.push({ category: category.attribs.href.split("/")[2],  percentage: percentage[i]})
